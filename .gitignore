@@ -1,0 +1,5 @@
+.env
+__pycache__/
+traces.jsonl
+results.json
+.venv/
