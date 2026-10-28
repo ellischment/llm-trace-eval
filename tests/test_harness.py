@@ -52,12 +52,16 @@ def test_is_correct_rejects_partial_and_lookalike_answers(response, gold):
 
 def test_run_eval_mock_scores_every_example(spans):
     examples = [json.loads(line) for line in DATASET.read_text(encoding="utf-8").splitlines() if line.strip()]
+    # The dataset deliberately contains "Compute 6 * 7", so the mock backend ("42") scores above zero
+    # and a metric that returns all-False or all-True fails here.
     expected_correct = sum(is_correct("42", ex["answer"]) for ex in examples)
+    assert 0 < expected_correct < len(examples)
 
     result = run_eval("mock", "any-model", str(DATASET))
 
     assert result["n"] == len(examples) == len(result["rows"])
     assert result["accuracy"] == pytest.approx(expected_correct / len(examples))
+    assert sum(row["correct"] for row in result["rows"]) == expected_correct
     for row, ex in zip(result["rows"], examples):
         assert set(row) == {"id", "question", "gold", "response", "correct"}
         assert row["id"] == ex["id"] and row["gold"] == ex["answer"]

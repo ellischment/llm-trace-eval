@@ -23,7 +23,7 @@
 {"id": 22, "question": "What is the capital of Thailand? Answer with the city name only.", "answer": "Bangkok"}
 {"id": 23, "question": "What is the capital of Argentina? Answer with the city name only.", "answer": "Buenos Aires"}
 {"id": 24, "question": "What is the capital of Morocco? Answer with the city name only.", "answer": "Rabat"}
-{"id": 25, "question": "Compute 7 * 8. Answer with the number only.", "answer": "56"}
+{"id": 25, "question": "Compute 6 * 7. Answer with the number only.", "answer": "42"}
 {"id": 26, "question": "Compute 12 * 13. Answer with the number only.", "answer": "156"}
 {"id": 27, "question": "Compute 9 * 9. Answer with the number only.", "answer": "81"}
 {"id": 28, "question": "Compute 15 * 4. Answer with the number only.", "answer": "60"}
