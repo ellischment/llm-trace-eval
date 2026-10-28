@@ -1,7 +1,9 @@
 import argparse
 import json
+import sys
 
-from llm_trace_eval.tracing import flush, setup_tracing
+from llm_trace_eval.harness import run_eval
+from llm_trace_eval.tracing import setup_tracing, shutdown
 
 
 def main() -> None:
@@ -14,10 +16,12 @@ def main() -> None:
     args = p.parse_args()
 
     setup_tracing()
-    from llm_trace_eval.harness import run_eval  # import after the tracer provider is set
-
-    result = run_eval(args.backend, args.model, args.dataset, args.limit)
-    flush()
+    try:
+        result = run_eval(args.backend, args.model, args.dataset, args.limit)
+    except FileNotFoundError as exc:
+        sys.exit(f"error: {exc}")
+    finally:
+        shutdown()
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
     print(f"{result['backend']}/{result['model']}: accuracy {result['accuracy']:.2%} on {result['n']} examples")

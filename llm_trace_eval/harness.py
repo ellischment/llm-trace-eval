@@ -19,7 +19,10 @@ def is_correct(response: str, gold: str) -> bool:
 
 
 def load_examples(path: str) -> list[dict]:
-    return [json.loads(line) for line in Path(path).read_text(encoding="utf-8").splitlines() if line.strip()]
+    p = Path(path)
+    if not p.is_file():
+        raise FileNotFoundError(f"dataset not found: {path}")
+    return [json.loads(line) for line in p.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
 def run_eval(backend: str, model: str, dataset: str, limit: int | None = None) -> dict:
