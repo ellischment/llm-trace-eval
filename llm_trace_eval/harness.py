@@ -11,11 +11,19 @@ tracer = trace.get_tracer("llm-trace-eval")
 
 
 def normalize(s: str) -> str:
-    return re.sub(r"[^\w\s]", "", s).strip().lower()
+    """Lowercase, drop thousands separators, strip quotes and sentence punctuation around words,
+    collapse whitespace. Keeps the minus sign and decimal point, so "-5" != "5" and "3.5" != "35"."""
+    s = s.lower()
+    s = re.sub(r"(?<=\d),(?=\d{3}\b)", "", s)
+    s = re.sub(r"[\"'`*()\[\]]", "", s)
+    s = re.sub(r"(?<=\w)[.,!?;:]+(?=\s|$)", "", s)
+    return " ".join(s.split())
 
 
 def is_correct(response: str, gold: str) -> bool:
-    return normalize(gold) in normalize(response).split() or normalize(response) == normalize(gold)
+    # Exact match after normalization. Substring or token matching would count
+    # "Not Paris, Milan" as a correct "Paris", so it is deliberately not used.
+    return normalize(response) == normalize(gold)
 
 
 def load_examples(path: str) -> list[dict]:
