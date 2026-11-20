@@ -6,6 +6,11 @@
 
 Accuracy считается как точное совпадение после нормализации: регистр, кавычки, точка в конце и пробелы не мешают, а вот «Not Paris, Milan» за «Paris» не засчитывается, и «-5» не равно «5». Такой выбор сознательный: при промпте «ответь только городом» любое вхождение подстроки раздувает метрику, а понять, где именно модель ошиблась, потом невозможно.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/trace-eval-flow-dark.svg">
+  <img src="docs/img/trace-eval-flow-light.svg" width="100%" alt="Flow: 50 examples with known answers, one llm.call span per model call, exact-match scoring after normalisation, results.json and traces.jsonl as output. Failed calls become ERROR spans and the run continues.">
+</picture>
+
 ## Запуск
 
 ```bash
